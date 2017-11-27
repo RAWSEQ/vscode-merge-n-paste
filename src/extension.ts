@@ -38,7 +38,7 @@ export function activate(context: vscode.ExtensionContext) {
 
         let doc = editor.document;
 
-        let base_path = process.env.TEMP+"\\vscode-merge-n-paste\\";
+        let base_path = process.env.TEMP+"/vscode-merge-n-paste-";
         let file_name_editor = "EDITOR_{id}.txt";
         let file_name_clipboard = "CLIPBOARD_{id}.txt";
         let file_name_merged = "MERGED_{id}.txt";
@@ -55,8 +55,6 @@ export function activate(context: vscode.ExtensionContext) {
             cur_selection = new Selection(startPos, endPos);
         }
 
-        exists(base_path,(ex) => { if(!ex) mkdir(base_path); });
-        
         writeFile(file_path_editor, doc.getText(cur_selection), (err) =>{});
 
         paste((e,d) => 
