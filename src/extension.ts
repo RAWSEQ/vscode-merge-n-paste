@@ -6,6 +6,7 @@ import { window, env, Position, Selection } from 'vscode';
 import { appendFile, writeFile, readFile, mkdir, exists, unlink } from 'fs';
 import { paste } from 'copy-paste';
 import { exec } from 'child_process';
+import { tmpdir } from 'os';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -32,13 +33,13 @@ export function activate(context: vscode.ExtensionContext) {
         let editor = window.activeTextEditor;
         if(!editor) return;
         if(!pathToMergeTool){
-            vscode.window.showInformationMessage("Please define your Merge tool to Settings.");
+            vscode.window.showInformationMessage("Please restart editor and define your Merge tool to Settings[merge-n-paste.pathToMergeTool].");
             return;
         }
 
         let doc = editor.document;
 
-        let base_path = process.env.TEMP+"/vscode-merge-n-paste-";
+        let base_path = tmpdir()+"/vscode-merge-n-paste-";
         let file_name_editor = "EDITOR_{id}.txt";
         let file_name_clipboard = "CLIPBOARD_{id}.txt";
         let file_name_merged = "MERGED_{id}.txt";
