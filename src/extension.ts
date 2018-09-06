@@ -33,7 +33,7 @@ export function activate(context: vscode.ExtensionContext) {
         let editor = window.activeTextEditor;
         if(!editor) return;
         if(!pathToMergeTool){
-            vscode.window.showInformationMessage("Please restart editor and define your Merge tool to Settings[merge-n-paste.pathToMergeTool].");
+            vscode.window.showInformationMessage("Please Define your MergeTool to Settings[merge-n-paste.pathToMergeTool].");
             return;
         }
 
@@ -56,12 +56,7 @@ export function activate(context: vscode.ExtensionContext) {
             cur_selection = new Selection(startPos, endPos);
         }
 
-        writeFile(file_path_editor, doc.getText(cur_selection), (err) =>{});
-
-        paste((e,d) => 
-        {
-            writeFile(file_path_clipboard, d, (err) =>{});
-        });
+        let editor_text = doc.getText(cur_selection);
 
         let delete_temp = () => 
         {
@@ -70,26 +65,64 @@ export function activate(context: vscode.ExtensionContext) {
             exists(file_path_merged,(ex) => { if(ex) unlink(file_path_merged, (err) =>{}) });
         };
 
-        exec(pathToMergeTool
-            .replace("%E", file_path_editor)
-            .replace("%C", file_path_clipboard)
-            .replace("%M", file_path_merged)
-            ,(error,stdout,stderr) =>
+        paste((e,d) => 
         {
-            let reflectFilePath = reflectFile
+            if(editor_text == d){
+                vscode.window.showInformationMessage("EDITOR and CLIPBOARD are the same.");
+                return;
+            }
+
+            writeFile(file_path_editor, editor_text, (err) =>{});
+            writeFile(file_path_clipboard, d, (err) =>{});
+
+            exec(pathToMergeTool
                 .replace("%E", file_path_editor)
                 .replace("%C", file_path_clipboard)
                 .replace("%M", file_path_merged)
-
-            exists(reflectFilePath,(ex) => 
-            { 
-                if(ex) {
-                    vscode.window.showInformationMessage("Do you want to reflect MERGED?", { modal: true }, 'Yes')
-                    .then(result => 
-                    {
-                        if(result == "Yes"){
-                            readFile(reflectFilePath
-                                ,(err,data) => 
+                ,(error,stdout,stderr) =>
+            {
+                let reflectFilePath = reflectFile
+                    .replace("%E", file_path_editor)
+                    .replace("%C", file_path_clipboard)
+                    .replace("%M", file_path_merged)
+    
+                exists(reflectFilePath,(ex) => 
+                { 
+                    if(ex) {
+                        vscode.window.showInformationMessage("Are you sure you want to reflect from MERGED?", { modal: true }, 'Yes')
+                        .then(result => 
+                        {
+                            if(result == "Yes"){
+                                readFile(reflectFilePath
+                                    ,(err,data) => 
+                                {
+                                    if(err) return;
+                                    editor.edit(edit => 
+                                    {
+                                        edit.replace(cur_selection, data.toString());
+                                    });
+                                    delete_temp();
+                                });
+                            }else{
+                                delete_temp();
+                            }
+                        });
+                    }else{
+                        vscode.window.showInformationMessage("Are you sure you want to reflect from.. ", { modal: true }, 'EDITOR', 'CLIPBOARD')
+                        .then(result => 
+                        {
+                            reflectFilePath = null;
+    
+                            if(result == "EDITOR"){
+                                reflectFilePath = file_path_editor;
+                            }else if(result == "CLIPBOARD"){
+                                reflectFilePath = file_path_clipboard;
+                            }else{
+                                delete_temp();
+                                return;
+                            }
+    
+                            readFile(reflectFilePath, (err,data) => 
                             {
                                 if(err) return;
                                 editor.edit(edit => 
@@ -98,36 +131,9 @@ export function activate(context: vscode.ExtensionContext) {
                                 });
                                 delete_temp();
                             });
-                        }else{
-                            delete_temp();
-                        }
-                    });
-                }else{
-                    vscode.window.showInformationMessage("Do you want to reflect? ", { modal: true }, 'EDITOR', 'CLIPBOARD')
-                    .then(result => 
-                    {
-                        reflectFilePath = null;
-
-                        if(result == "EDITOR"){
-                            reflectFilePath = file_path_editor;
-                        }else if(result == "CLIPBOARD"){
-                            reflectFilePath = file_path_clipboard;
-                        }else{
-                            delete_temp();
-                            return;
-                        }
-
-                        readFile(reflectFilePath, (err,data) => 
-                        {
-                            if(err) return;
-                            editor.edit(edit => 
-                            {
-                                edit.replace(cur_selection, data.toString());
-                            });
-                            delete_temp();
                         });
-                    });
-                }
+                    }
+                });
             });
         });
     }));

@@ -2,7 +2,7 @@
     "name": "merge-n-paste",
     "displayName": "merge-n-paste",
     "description": "Compare(editor <=> clipboard) and paste using the external diff-merge tool",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "publisher": "RAWSEQ",
     "icon": "image/mnp.png",
     "license": "SEE LICENSE IN README.md",
@@ -35,33 +35,31 @@
             "title": "Merge and Paste",
             "properties": {
                 "merge-n-paste.pathToMergeTool": {
-                    "type": [
-                        "string",
-                        "null"
-                    ],
+                    "type": "string",
                     "default": "",
                     "description": "The path to Merge tool. \nreplace: %E = EditorFile, %C = ClipboardFile, %M = MergedOutput \nex: \"\\\"C:\\\\Program Files\\\\KDiff3\\\\KDiff3.exe\\\" %E %C -o %M\" "
                 },
                 "merge-n-paste.reflectFile": {
-                    "type": [
-                        "string",
-                        "null"
-                    ],
+                    "type": "string",
                     "default": "%M",
                     "description": "Reflect source File to editor. \nreplace: %E = EditorFile, %C = ClipboardFile, %M = MergedOutput \nex: \"Reflect clipboard text\" = %C"
                 }
             }
         },
         "menus": {
-            "editor/context": [{
-                "command": "extension.mergeNPaste",
-                "group": "9_cutcopypaste@500"
-            }]
+            "editor/context": [
+                {
+                    "command": "extension.mergeNPaste",
+                    "group": "9_cutcopypaste@500"
+                }
+            ]
         },
-        "keybindings": [{
-            "command": "extension.mergeNPaste",
-            "key": "ctrl+alt+v"
-        }]
+        "keybindings": [
+            {
+                "command": "extension.mergeNPaste",
+                "key": "ctrl+alt+v"
+            }
+        ]
     },
     "scripts": {
         "vscode:prepublish": "npm run compile",
@@ -71,12 +69,16 @@
         "test": "npm run compile && node ./node_modules/vscode/bin/test"
     },
     "devDependencies": {
-        "typescript": "^2.6.1",
-        "vscode": "^1.1.6",
-        "@types/node": "^7.0.43",
-        "@types/mocha": "^2.2.42"
+        "typescript": "^2.9.2",
+        "vscode": "^1.1.21",
+        "@types/node": "^7.0.70",
+        "@types/mocha": "^2.2.48"
     },
     "dependencies": {
         "copy-paste": "^1.3.0"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/RAWSEQ/vscode-merge-n-paste.git"
     }
 }

@@ -1,5 +1,11 @@
 # Change Log
 
+## [1.0.3] - 2018-09-06
+### Changed
+- Update library.
+- Added support for new settings.
+- Added pre-compare.
+
 ## [1.0.2] - 2017-11-27
 ### Changed
 - Temporary file position.
