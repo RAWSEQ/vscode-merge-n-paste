@@ -1,5 +1,9 @@
 # Change Log
 
+## [1.0.4] - 2018-11-28
+### Changed
+- Updated library. [event-stream] [sync-exec]
+
 ## [1.0.3] - 2018-09-06
 ### Changed
 - Update library.
