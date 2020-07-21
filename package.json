@@ -2,7 +2,7 @@
     "name": "merge-n-paste",
     "displayName": "merge-n-paste",
     "description": "Compare(editor <=> clipboard) and paste using the external diff-merge tool",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "publisher": "RAWSEQ",
     "icon": "image/mnp.png",
     "license": "SEE LICENSE IN README.md",
@@ -37,7 +37,7 @@
                 "merge-n-paste.pathToMergeTool": {
                     "type": "string",
                     "default": "",
-                    "description": "The path to Merge tool. \nreplace: %E = EditorFile, %C = ClipboardFile, %M = MergedOutput \nex: \"\\\"C:\\\\Program Files\\\\KDiff3\\\\KDiff3.exe\\\" %E %C -o %M\" "
+                    "description": "The path to Merge tool. \nreplace: %E = EditorFile, %C = ClipboardFile, %M = MergedOutput \nex(WinMerge): \"C:\\Program Files (x86)\\WinMerge\\WinMergeU.exe\" %E %C \nex(KDIFF): \"C:\\Program Files\\KDiff3\\KDiff3.exe\" %E %C -o %M \nex(TortoiseGitMerge): \"C:\\Program Files\\TortoiseGit\\bin\\TortoiseGitMerge.exe\" %E %C "
                 },
                 "merge-n-paste.reflectFile": {
                     "type": "string",

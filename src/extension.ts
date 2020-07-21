@@ -81,6 +81,13 @@ export function activate(context: vscode.ExtensionContext) {
                 .replace("%M", file_path_merged)
                 ,(error,stdout,stderr) =>
             {
+                if (stderr) {
+                    vscode.window.showWarningMessage("Error during runnning merge tool: " + stderr + " \ncommand: "+pathToMergeTool
+                    .replace("%E", file_path_editor)
+                    .replace("%C", file_path_clipboard)
+                    .replace("%M", file_path_merged));
+                    return;
+                }
                 let reflectFilePath = reflectFile
                     .replace("%E", file_path_editor)
                     .replace("%C", file_path_clipboard)
