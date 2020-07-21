@@ -1,5 +1,10 @@
 # Change Log
 
+## [1.0.5] - 2020-07-21
+### Changed
+- Added display Merge tool error messages
+- Change setting
+
 ## [1.0.4] - 2018-11-28
 ### Changed
 - Updated library. [event-stream] [sync-exec]
