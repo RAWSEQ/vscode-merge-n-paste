@@ -1,0 +1,13 @@
+{
+	"extension.mergeNPaste.menuTitle": "Merge and Paste",
+	"extension.mergeNPaste.config.description.pathToMergeTool": "The path to Merge tool. \nreplace: %E = EditorFile, %C = ClipboardFile, %M = MergedOutput \nex(WinMerge): \"C:\\Program Files (x86)\\WinMerge\\WinMergeU.exe\" %E %C \nex(KDIFF): \"C:\\Program Files\\KDiff3\\KDiff3.exe\" %E %C -o %M \nex(TortoiseGitMerge): \"C:\\Program Files\\TortoiseGit\\bin\\TortoiseGitMerge.exe\" %E %C ",
+	"extension.mergeNPaste.config.description.reflectFile": "Reflect source File to editor. \nreplace: %E = EditorFile, %C = ClipboardFile, %M = MergedOutput \nex: \"Reflect clipboard text\" = %C",
+	"extension.mergeNPaste.message.isSame": "EDITOR and CLIPBOARD are the same.",
+	"extension.mergeNPaste.message.mergeReflectConfirm": "Are you sure you want to reflect from MERGED?",
+	"extension.mergeNPaste.message.reflectSelect": "Are you sure you want to reflect from.. ",
+	"extension.mergeNPaste.message.notReflected": "Due to changes in the original editor during the comparison, it could not be reflected.",
+	"extension.mergeNPaste.message.aboutDiffTab": "Save and close this tab and it will be reflected in the original editor.",
+	"extension.mergeNPaste.word.editor": "Editor",
+	"extension.mergeNPaste.word.clipboard": "Clipboard",
+	"extension.mergeNPaste.word.yes": "Yes"
+}

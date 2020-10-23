@@ -2,7 +2,7 @@
     "name": "merge-n-paste",
     "displayName": "merge-n-paste",
     "description": "Compare(editor <=> clipboard) and paste using the external diff-merge tool",
-    "version": "1.0.5",
+    "version": "1.1.0",
     "publisher": "RAWSEQ",
     "icon": "image/mnp.png",
     "license": "SEE LICENSE IN README.md",
@@ -27,22 +27,22 @@
         "commands": [
             {
                 "command": "extension.mergeNPaste",
-                "title": "Merge and Paste"
+                "title": "%extension.mergeNPaste.menuTitle%"
             }
         ],
         "configuration": {
             "type": "object",
-            "title": "Merge and Paste",
+            "title": "%extension.mergeNPaste.menuTitle%",
             "properties": {
                 "merge-n-paste.pathToMergeTool": {
                     "type": "string",
                     "default": "",
-                    "description": "The path to Merge tool. \nreplace: %E = EditorFile, %C = ClipboardFile, %M = MergedOutput \nex(WinMerge): \"C:\\Program Files (x86)\\WinMerge\\WinMergeU.exe\" %E %C \nex(KDIFF): \"C:\\Program Files\\KDiff3\\KDiff3.exe\" %E %C -o %M \nex(TortoiseGitMerge): \"C:\\Program Files\\TortoiseGit\\bin\\TortoiseGitMerge.exe\" %E %C "
+                    "description": "%extension.mergeNPaste.config.description.pathToMergeTool%"
                 },
                 "merge-n-paste.reflectFile": {
                     "type": "string",
                     "default": "%M",
-                    "description": "Reflect source File to editor. \nreplace: %E = EditorFile, %C = ClipboardFile, %M = MergedOutput \nex: \"Reflect clipboard text\" = %C"
+                    "description": "%extension.mergeNPaste.config.description.reflectFile%"
                 }
             }
         },
@@ -75,7 +75,9 @@
         "vscode": "^1.1.22"
     },
     "dependencies": {
-        "copy-paste": "^1.3.0"
+        "copy-paste": "^1.3.0",
+        "fs-extra": "^9.0.1",
+        "vscode-nls": "^5.0.0"
     },
     "repository": {
         "type": "git",
