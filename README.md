@@ -4,12 +4,16 @@ Merge before pasting.
 
 ## Features
 
-Compare(editor <=> clipboard) and paste using the external merge tool.
+Compare(editor <=> clipboard) and paste using the diff tool or external merge tool.
 
 *Tested on Windows platform only*
 
 Like this:
 
+- diff tool
+![Image](https://ltside.com/img/ext-merge-n-paste-exp-v.gif)
+
+- external merge tool
 ![Image](https://ltside.com/img/ext-merge-n-paste-exp.gif)
 
 
