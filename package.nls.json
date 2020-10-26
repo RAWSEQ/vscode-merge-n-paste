@@ -6,7 +6,7 @@
 	"extension.mergeNPaste.message.mergeReflectConfirm": "Are you sure you want to reflect from MERGED?",
 	"extension.mergeNPaste.message.reflectSelect": "Are you sure you want to reflect from.. ",
 	"extension.mergeNPaste.message.notReflected": "Due to changes in the original editor during the comparison, it could not be reflected.",
-	"extension.mergeNPaste.message.aboutDiffTab": "Save and close this tab and it will be reflected in the original editor.",
+	"extension.mergeNPaste.message.aboutDiffTab": "Closing the Diff tab reflects the text saved in the original editor.",
 	"extension.mergeNPaste.word.editor": "Editor",
 	"extension.mergeNPaste.word.clipboard": "Clipboard",
 	"extension.mergeNPaste.word.yes": "Yes"

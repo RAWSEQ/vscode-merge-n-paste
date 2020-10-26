@@ -1,12 +1,12 @@
 {
-	"extension.mergeNPaste.menuTitle": "マージしてペースト",
-	"extension.mergeNPaste.config.description.pathToMergeTool": "マージツールのコマンドライン。空の場合はVSCodeのDiffが使われます。 \nreplace: %E = EditorFile, %C = ClipboardFile, %M = MergedOutput \n例(WinMerge): \"C:\\Program Files (x86)\\WinMerge\\WinMergeU.exe\" %E %C \n例(KDIFF): \"C:\\Program Files\\KDiff3\\KDiff3.exe\" %E %C -o %M \n例(TortoiseGitMerge): \"C:\\Program Files\\TortoiseGit\\bin\\TortoiseGitMerge.exe\" %E %C ",
-	"extension.mergeNPaste.config.description.reflectFile": "Reflect source File to editor. \nreplace: %E = EditorFile, %C = ClipboardFile, %M = MergedOutput \nex: \"Reflect clipboard text\" = %C",
+	"extension.mergeNPaste.menuTitle": "マージして貼り付け",
+	"extension.mergeNPaste.config.description.pathToMergeTool": "マージツールのコマンドライン。空の場合はVSCodeのDiffが使われます。 \n置き換え文字: %E = エディタ, %C = クリップボード, %M = マージ出力 \n例(WinMerge): \"C:\\Program Files (x86)\\WinMerge\\WinMergeU.exe\" %E %C \n例(KDIFF): \"C:\\Program Files\\KDiff3\\KDiff3.exe\" %E %C -o %M \n例(TortoiseGitMerge): \"C:\\Program Files\\TortoiseGit\\bin\\TortoiseGitMerge.exe\" %E %C ",
+	"extension.mergeNPaste.config.description.reflectFile": "エディタに反映するテキスト \n置き換え文字: %E = エディタ, %C = クリップボード, %M = マージ出力 \n例: \"クリップボードのテキストを反映する場合\" = %C",
 	"extension.mergeNPaste.message.isSame": "エディタとクリップボードは同一でした。",
 	"extension.mergeNPaste.message.mergeReflectConfirm": "マージ後のテキストを反映しますか？",
 	"extension.mergeNPaste.message.reflectSelect": "反映するテキストを選んでください。",
 	"extension.mergeNPaste.message.notReflected": "比較中に元のエディタに変更があった為、反映できませんでした。",
-	"extension.mergeNPaste.message.aboutDiffTab": "このタブを保存して閉じると元のエディタに反映されます。",
+	"extension.mergeNPaste.message.aboutDiffTab": "比較タブを閉じると元のエディタに保存したテキストが反映されます。",
 	"extension.mergeNPaste.word.editor": "エディタ",
 	"extension.mergeNPaste.word.clipboard": "クリップボード",
 	"extension.mergeNPaste.word.yes": "はい"
