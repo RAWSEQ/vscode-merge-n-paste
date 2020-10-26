@@ -1,5 +1,13 @@
 # Change Log
 
+## [1.1.0] - 2020-10-26
+### Added
+- Added i18n.
+- Added default mode (Using the standard diff editor).
+
+### Changed
+- Improvement in operation when using it on a Mac
+
 ## [1.0.5] - 2020-07-21
 ### Changed
 - Added display Merge tool error messages
