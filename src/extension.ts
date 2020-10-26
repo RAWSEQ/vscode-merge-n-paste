@@ -83,8 +83,8 @@ export function activate(context: vscode.ExtensionContext) {
                     preserveFocus: true,
                     preview: true
                 };
-                let rs_clip = vscode.Uri.parse('file:///' + file_path_clipboard);
-                let rs_editor = vscode.Uri.parse('file:///' + file_path_editor);
+                let rs_clip = vscode.Uri.file(file_path_clipboard);
+                let rs_editor = vscode.Uri.file(file_path_editor);
 
                 let cmd = vscode.commands.executeCommand('vscode.diff',
                     rs_clip,
