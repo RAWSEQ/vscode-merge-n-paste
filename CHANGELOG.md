@@ -1,5 +1,9 @@
 # Change Log
 
+## [1.2.0] - 2021-04-19
+### Changed
+- Fix Unicode probrem for Mac
+
 ## [1.1.0] - 2020-10-26
 ### Added
 - Added i18n.
