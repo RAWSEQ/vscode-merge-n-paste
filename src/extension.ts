@@ -4,7 +4,7 @@
 import * as vscode from 'vscode';
 import { window, env, Position, Selection } from 'vscode';
 import { appendFile, writeFile, readFile, mkdir, exists, unlink, existsSync } from 'fs';
-import { paste } from 'copy-paste';
+import { readSync } from 'clipboardy';
 import { exec } from 'child_process';
 import { tmpdir } from 'os';
 import { Localize } from './localize';
@@ -69,147 +69,147 @@ export function activate(context: vscode.ExtensionContext) {
             }
         };
 
-        paste((e, d) => {
-            if (editor_text == d) {
-                vscode.window.showInformationMessage(ll.localize('extension.mergeNPaste.message.isSame'));
-                return;
-            }
+        var clipdata = readSync();
 
-            writeFile(file_path_editor, editor_text, (err) => { });
-            writeFile(file_path_clipboard, d, (err) => { });
+        if (editor_text == clipdata) {
+            vscode.window.showInformationMessage(ll.localize('extension.mergeNPaste.message.isSame'));
+            return;
+        }
 
-            if (!pathToMergeTool) {
-                const opts: vscode.TextDocumentShowOptions = {
-                    preserveFocus: true,
-                    preview: true
-                };
-                let rs_clip = vscode.Uri.file(file_path_clipboard);
-                let rs_editor = vscode.Uri.file(file_path_editor);
+        writeFile(file_path_editor, editor_text, (err) => { });
+        writeFile(file_path_clipboard, clipdata, (err) => { });
 
-                let cmd = vscode.commands.executeCommand('vscode.diff',
-                    rs_clip,
-                    rs_editor,
-                    ll.localize('extension.mergeNPaste.word.clipboard') + ' => ' + ll.localize('extension.mergeNPaste.word.editor'),
-                    opts
-                );
-                cmd.then(() => {
-                    vscode.window.showInformationMessage(ll.localize('extension.mergeNPaste.message.aboutDiffTab'));
-                    let de = window.activeTextEditor;
-                    vscode.workspace.onDidCloseTextDocument(doc => {
-                        if (doc == de.document) {
-                            vscode.window.showInformationMessage(ll.localize('extension.mergeNPaste.message.reflectSelect'), { modal: true }, ll.localize('extension.mergeNPaste.word.editor'), ll.localize('extension.mergeNPaste.word.clipboard'))
-                                .then(result => {
-                                    let reflectFilePath = null;
+        if (!pathToMergeTool) {
+            const opts: vscode.TextDocumentShowOptions = {
+                preserveFocus: true,
+                preview: true
+            };
+            let rs_clip = vscode.Uri.file(file_path_clipboard);
+            let rs_editor = vscode.Uri.file(file_path_editor);
 
-                                    if (result == ll.localize('extension.mergeNPaste.word.editor')) {
-                                        reflectFilePath = file_path_editor;
-                                    } else if (result == ll.localize('extension.mergeNPaste.word.clipboard')) {
-                                        reflectFilePath = file_path_clipboard;
-                                    } else {
-                                        delete_temp();
-                                        return;
-                                    }
+            let cmd = vscode.commands.executeCommand('vscode.diff',
+                rs_clip,
+                rs_editor,
+                ll.localize('extension.mergeNPaste.word.clipboard') + ' => ' + ll.localize('extension.mergeNPaste.word.editor'),
+                opts
+            );
+            cmd.then(() => {
+                vscode.window.showInformationMessage(ll.localize('extension.mergeNPaste.message.aboutDiffTab'));
+                let de = window.activeTextEditor;
+                vscode.workspace.onDidCloseTextDocument(doc => {
+                    if (doc == de.document) {
+                        vscode.window.showInformationMessage(ll.localize('extension.mergeNPaste.message.reflectSelect'), { modal: true }, ll.localize('extension.mergeNPaste.word.editor'), ll.localize('extension.mergeNPaste.word.clipboard'))
+                            .then(result => {
+                                let reflectFilePath = null;
 
-                                    editor = window.activeTextEditor;
-                                    if (editor.document.fileName.indexOf('vscode-merge-n-paste-CLIPBOARD') != -1) {
-                                        editor.document.save().then(() => {
-                                            vscode.commands.executeCommand('workbench.action.closeActiveEditor').then(() => {
-                                                readFile(reflectFilePath, (err, data) => {
-                                                    if (err) return;
-                                                    editor = window.activeTextEditor;
-                                                    if (docForDiff != editor.document || editor_text != editor.document.getText(cur_selection)) {
-                                                        vscode.window.showWarningMessage(ll.localize('extension.mergeNPaste.message.notReflected'));
-                                                        delete_temp();
-                                                        return;
-                                                    }
-                                                    editor.edit(edit => {
-                                                        edit.replace(cur_selection, data.toString());
-                                                    });
-                                                    delete_temp();
-                                                });
-                                            });
-                                        });
-                                    } else {
-                                        readFile(reflectFilePath, (err, data) => {
-                                            if (err) return;
-                                            editor = window.activeTextEditor;
-                                            if (docForDiff != editor.document || editor_text != editor.document.getText(cur_selection)) {
-                                                vscode.window.showWarningMessage(ll.localize('extension.mergeNPaste.message.notReflected'));
-                                                delete_temp();
-                                                return;
-                                            }
-                                            editor.edit(edit => {
-                                                edit.replace(cur_selection, data.toString());
-                                            });
-                                            delete_temp();
-                                        });
-                                    }
+                                if (result == ll.localize('extension.mergeNPaste.word.editor')) {
+                                    reflectFilePath = file_path_editor;
+                                } else if (result == ll.localize('extension.mergeNPaste.word.clipboard')) {
+                                    reflectFilePath = file_path_clipboard;
+                                } else {
+                                    delete_temp();
+                                    return;
+                                }
 
-                                });
-                        }
-                    });
-                });
-
-            } else {
-                exec(pathToMergeTool
-                    .replace("%E", file_path_editor)
-                    .replace("%C", file_path_clipboard)
-                    .replace("%M", file_path_merged)
-                    , (error, stdout, stderr) => {
-                        if (stderr) {
-                            console.log("Error during runnning merge tool: " + stderr + " \ncommand: " + pathToMergeTool
-                                .replace("%E", file_path_editor)
-                                .replace("%C", file_path_clipboard)
-                                .replace("%M", file_path_merged));
-                        }
-                        let reflectFilePath = reflectFile
-                            .replace("%E", file_path_editor)
-                            .replace("%C", file_path_clipboard)
-                            .replace("%M", file_path_merged)
-
-                        if (existsSync(reflectFilePath)) {
-                            vscode.window.showInformationMessage(ll.localize('extension.mergeNPaste.message.mergeReflectConfirm'), { modal: true }, ll.localize('extension.mergeNPaste.word.yes'))
-                                .then(result => {
-                                    if (result == ll.localize('extension.mergeNPaste.word.yes')) {
-                                        readFile(reflectFilePath
-                                            , (err, data) => {
+                                editor = window.activeTextEditor;
+                                if (editor.document.fileName.indexOf('vscode-merge-n-paste-CLIPBOARD') != -1) {
+                                    editor.document.save().then(() => {
+                                        vscode.commands.executeCommand('workbench.action.closeActiveEditor').then(() => {
+                                            readFile(reflectFilePath, (err, data) => {
                                                 if (err) return;
+                                                editor = window.activeTextEditor;
+                                                if (docForDiff != editor.document || editor_text != editor.document.getText(cur_selection)) {
+                                                    vscode.window.showWarningMessage(ll.localize('extension.mergeNPaste.message.notReflected'));
+                                                    delete_temp();
+                                                    return;
+                                                }
                                                 editor.edit(edit => {
                                                     edit.replace(cur_selection, data.toString());
                                                 });
                                                 delete_temp();
                                             });
-                                    } else {
-                                        delete_temp();
-                                    }
-                                });
-                        } else {
-                            vscode.window.showInformationMessage(ll.localize('extension.mergeNPaste.message.reflectSelect'), { modal: true }, ll.localize('extension.mergeNPaste.word.editor'), ll.localize('extension.mergeNPaste.word.clipboard'))
-                                .then(result => {
-                                    reflectFilePath = null;
-
-                                    if (result == ll.localize('extension.mergeNPaste.word.editor')) {
-                                        reflectFilePath = file_path_editor;
-                                    } else if (result == ll.localize('extension.mergeNPaste.word.clipboard')) {
-                                        reflectFilePath = file_path_clipboard;
-                                    } else {
-                                        delete_temp();
-                                        return;
-                                    }
-
+                                        });
+                                    });
+                                } else {
                                     readFile(reflectFilePath, (err, data) => {
                                         if (err) return;
+                                        editor = window.activeTextEditor;
+                                        if (docForDiff != editor.document || editor_text != editor.document.getText(cur_selection)) {
+                                            vscode.window.showWarningMessage(ll.localize('extension.mergeNPaste.message.notReflected'));
+                                            delete_temp();
+                                            return;
+                                        }
                                         editor.edit(edit => {
                                             edit.replace(cur_selection, data.toString());
                                         });
                                         delete_temp();
                                     });
-                                });
-                        }
-                    });
-            }
+                                }
 
-        });
+                            });
+                    }
+                });
+            });
+
+        } else {
+            exec(pathToMergeTool
+                .replace("%E", file_path_editor)
+                .replace("%C", file_path_clipboard)
+                .replace("%M", file_path_merged)
+                , (error, stdout, stderr) => {
+                    if (stderr) {
+                        console.log("Error during runnning merge tool: " + stderr + " \ncommand: " + pathToMergeTool
+                            .replace("%E", file_path_editor)
+                            .replace("%C", file_path_clipboard)
+                            .replace("%M", file_path_merged));
+                    }
+                    let reflectFilePath = reflectFile
+                        .replace("%E", file_path_editor)
+                        .replace("%C", file_path_clipboard)
+                        .replace("%M", file_path_merged)
+
+                    if (existsSync(reflectFilePath)) {
+                        vscode.window.showInformationMessage(ll.localize('extension.mergeNPaste.message.mergeReflectConfirm'), { modal: true }, ll.localize('extension.mergeNPaste.word.yes'))
+                            .then(result => {
+                                if (result == ll.localize('extension.mergeNPaste.word.yes')) {
+                                    readFile(reflectFilePath
+                                        , (err, data) => {
+                                            if (err) return;
+                                            editor.edit(edit => {
+                                                edit.replace(cur_selection, data.toString());
+                                            });
+                                            delete_temp();
+                                        });
+                                } else {
+                                    delete_temp();
+                                }
+                            });
+                    } else {
+                        vscode.window.showInformationMessage(ll.localize('extension.mergeNPaste.message.reflectSelect'), { modal: true }, ll.localize('extension.mergeNPaste.word.editor'), ll.localize('extension.mergeNPaste.word.clipboard'))
+                            .then(result => {
+                                reflectFilePath = null;
+
+                                if (result == ll.localize('extension.mergeNPaste.word.editor')) {
+                                    reflectFilePath = file_path_editor;
+                                } else if (result == ll.localize('extension.mergeNPaste.word.clipboard')) {
+                                    reflectFilePath = file_path_clipboard;
+                                } else {
+                                    delete_temp();
+                                    return;
+                                }
+
+                                readFile(reflectFilePath, (err, data) => {
+                                    if (err) return;
+                                    editor.edit(edit => {
+                                        edit.replace(cur_selection, data.toString());
+                                    });
+                                    delete_temp();
+                                });
+                            });
+                    }
+                });
+        }
+
     }));
 }
 
