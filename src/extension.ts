@@ -4,7 +4,6 @@
 import * as vscode from 'vscode';
 import { window, env, Position, Selection } from 'vscode';
 import { appendFile, writeFile, readFile, mkdir, exists, unlink, existsSync } from 'fs';
-import { readSync } from 'clipboardy';
 import { exec } from 'child_process';
 import { tmpdir } from 'os';
 import { Localize } from './localize';
@@ -21,7 +20,7 @@ export function activate(context: vscode.ExtensionContext) {
     // Now provide the implementation of the command with  registerCommand
     // The commandId parameter must match the command field in package.json
 
-    context.subscriptions.push(vscode.commands.registerCommand('extension.mergeNPaste', () => {
+    context.subscriptions.push(vscode.commands.registerCommand('extension.mergeNPaste', async () => {
         // The code you place here will be executed every time your command is executed
 
         // Display a message box to the user
@@ -69,7 +68,7 @@ export function activate(context: vscode.ExtensionContext) {
             }
         };
 
-        var clipdata = readSync();
+        var clipdata = await vscode.env.clipboard.readText();
 
         if (editor_text == clipdata) {
             vscode.window.showInformationMessage(ll.localize('extension.mergeNPaste.message.isSame'));

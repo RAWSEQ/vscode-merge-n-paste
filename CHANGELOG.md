@@ -1,5 +1,10 @@
 # Change Log
 
+## [1.3.0] - 2022-06-08
+### Changed
+- Migrate copy and paste modules to official
+- Migration to latest configuration
+
 ## [1.2.0] - 2021-04-19
 ### Changed
 - Fix Unicode probrem for Mac
