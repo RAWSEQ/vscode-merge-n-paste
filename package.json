@@ -2,7 +2,7 @@
     "name": "merge-n-paste",
     "displayName": "merge-n-paste",
     "description": "Compare(editor <=> clipboard) and paste using the external diff-merge tool",
-    "version": "1.3.0",
+    "version": "1.3.7",
     "publisher": "RAWSEQ",
     "icon": "image/mnp.png",
     "license": "SEE LICENSE IN README.md",
@@ -22,7 +22,7 @@
     "activationEvents": [
         "onCommand:extension.mergeNPaste"
     ],
-    "main": "./out/extension",
+    "main": "./out/extension.js",
     "contributes": {
         "commands": [
             {
@@ -78,7 +78,6 @@
         "@typescript-eslint/parser": "^5.12.1",
         "@vscode/test-electron": "^2.1.2",
         "eslint": "^8.9.0",
-        "fs-extra": "^10.1.0",
         "glob": "^7.2.0",
         "mocha": "^9.2.1",
         "typescript": "^4.5.5"
@@ -86,5 +85,9 @@
     "repository": {
         "type": "git",
         "url": "https://github.com/RAWSEQ/vscode-merge-n-paste.git"
+    },
+    "dependencies": {
+        "fs-extra": "^10.1.0",
+        "vscode-nls": "^5.0.1"
     }
 }
