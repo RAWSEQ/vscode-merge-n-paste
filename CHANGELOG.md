@@ -1,5 +1,9 @@
 # Change Log
 
+## [1.4.0] - 2024-05-23
+### Changed
+- Changed to conform to vscode diff specification.
+
 ## [1.3.7] - 2022-06-08
 ### Changed
 - Fix Command not found Error
