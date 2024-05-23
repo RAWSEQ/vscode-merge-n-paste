@@ -95,8 +95,11 @@ export function activate(context: vscode.ExtensionContext) {
             cmd.then(() => {
                 vscode.window.showInformationMessage(ll.localize('extension.mergeNPaste.message.aboutDiffTab'));
                 let de = window.activeTextEditor;
-                vscode.workspace.onDidCloseTextDocument(doc => {
-                    if (doc == de.document) {
+
+                vscode.window.onDidChangeActiveTextEditor(e =>{
+                    if (!de || e.document != editor.document) return;
+                    const doc = e.document;
+                    de.document.save().then(() => {
                         vscode.window.showInformationMessage(ll.localize('extension.mergeNPaste.message.reflectSelect'), { modal: true }, ll.localize('extension.mergeNPaste.word.editor'), ll.localize('extension.mergeNPaste.word.clipboard'))
                             .then(result => {
                                 let reflectFilePath = null;
@@ -146,7 +149,8 @@ export function activate(context: vscode.ExtensionContext) {
                                 }
 
                             });
-                    }
+                        de = null;
+                    });
                 });
             });
 
